@@ -12,26 +12,31 @@ function App() {
     { id: 3, title: "JavaScript 3", body: "Description" },
   ]);
 
-  const [post, setPost] = useState({ title: "", body: "" });
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
 
   const addNewPost = (e) => {
     e.preventDefault();
-    setPosts(...posts, { ...post, id: Date.now });
-    setPost({ title: "", body: "" });
+    const newPost = {
+      id: Date.now(),
+      title,
+      body,
+    };
+    setPosts([...posts, newPost]);
   };
 
   return (
     <div className="container">
       <form>
         <SenInput
-          value={post.title}
-          onChange={(e) => setPost({ ...post, title: e.target.value })}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
           type="text"
           placeholder="Post Name"
         />
         <SenInput
-          value={post.body}
-          onChange={(e) => setPost({ ...post, body: e.target.value })}
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
           type="text"
           placeholder="Post Text"
         />
