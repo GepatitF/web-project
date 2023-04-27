@@ -1,48 +1,55 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import "./App.css";
 
 import PostList from "./components/PostList";
-import SenButton from "./components/button/SenButton";
-import SenInput from "./components/input/SenInput";
+import PostForm from "./components/PostForm";
+import PostFilter from "./components/PostFilter";
+import PostModal from "./components/modal/PostModal";
 
 function App() {
   const [posts, setPosts] = useState([
-    { id: 1, title: "JavaScript", body: "Description" },
-    { id: 2, title: "JavaScript 2", body: "Description" },
-    { id: 3, title: "JavaScript 3", body: "Description" },
+    { id: 1, title: "ff", body: "bDescription" },
+    { id: 2, title: "aa 2", body: "gDescription" },
+    { id: 3, title: "gg 3", body: "sDescription" },
   ]);
 
-  const [title, setTitle] = useState("");
-  const [body, setBody] = useState("");
+  const [filter, setFilter] = useState({ sort: "", query: "" });
 
-  const addNewPost = (e) => {
-    e.preventDefault();
-    const newPost = {
-      id: Date.now(),
-      title,
-      body,
-    };
+  const sortedPosts = useMemo(() => {
+    if (filter.sort) {
+      return [...posts].sort((a, b) =>
+        a[filter.sort].localeCompare(b[filter.sort])
+      );
+    }
+    return posts;
+  }, [filter.sort, posts]);
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter((post) =>
+      post.title.toLowerCase().includes(filter.query)
+    );
+  }, [filter.query, sortedPosts]);
+
+  const createPost = (newPost) => {
     setPosts([...posts, newPost]);
+  };
+
+  const removePost = (post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
   };
 
   return (
     <div className="container">
-      <form>
-        <SenInput
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          type="text"
-          placeholder="Post Name"
-        />
-        <SenInput
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-          type="text"
-          placeholder="Post Text"
-        />
-        <SenButton onClick={addNewPost}>Create new post</SenButton>
-      </form>
-      <PostList posts={posts} title="JavaScript posts list" />
+      <PostModal>
+        <PostForm create={createPost} />
+      </PostModal>
+      <hr />
+      <PostFilter filter={filter} setFilter={setFilter} />
+      <PostList
+        remove={removePost}
+        posts={sortedAndSearchedPosts}
+        title="JavaScript posts list"
+      />
     </div>
   );
 }

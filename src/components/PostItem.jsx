@@ -9,7 +9,7 @@ const PostItem = (props) => {
         <h1 className="post-header">{props.number}.{props.post.title}</h1>
         <div className="post-text">{props.post.body}</div>
         <div className="btn-container">
-          <SenButton>Удалить</SenButton>
+          <SenButton onClick={() => props.remove(props.post)}>Удалить</SenButton>
         </div>
       </div>
     </div>

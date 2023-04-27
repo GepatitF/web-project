@@ -1,6 +1,6 @@
 import React from "react"
 
-const SenInput = React.forwardRef((props, ref) => {
+const SenInput = React.forwardRef((props, ref ) => {
 
   return (
     <input ref={ref} {...props} />
