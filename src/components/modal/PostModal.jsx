@@ -1,13 +1,22 @@
-import React from "react"
+import React from "react";
 
-import classes from './PostModal.module.css'
+import classes from './PostModal.module.css';
 
-const PostModal = ({children}) => {
-  <div className={[classes.modal, classes.active].join('')}> 
-    <div className={classes.content}>
-      {children}
+const PostModal = ({children, visible, setVisible}) => {
+
+  const rootClasses = [classes.modal]
+
+  if (visible) {
+    rootClasses.push(classes.active)
+  }
+
+  return (
+    <div className={rootClasses.join(' ')} onClick={() => setVisible(false)}> 
+      <div className={classes.content} onClick={e => e.stopPropagation()}>
+        {children}
+      </div>
     </div>
-  </div>
+  )
 }
 
 export default PostModal;
